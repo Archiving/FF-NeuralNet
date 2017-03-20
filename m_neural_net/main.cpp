@@ -30,21 +30,26 @@ int main(int* argc, char* argv[]) {
 		trainingPass++;
 		cout << endl << "Pass: " << trainingPass;
 		//If the size of inputValues is not the number given in the map
-		if (trainingData.getNextInputs(inputValues) != map[0]) break;
+		if (trainingData.getValues(inputValues, "I") != map[0]) {
+			break;
+		}
 		showVectorValues(": Inputs:", inputValues);
 		net.feedForward(inputValues);
 		
 		net.getResults(outputValues);
 		showVectorValues("Outputs: ", outputValues);
 
-		trainingData.getTargetOutputs(targetValues);
-		showVectorValues("Targets:", targetValues);
-		assert(targetValues.size() == map.back());
+		size_t  dataSize = trainingData.getValues(targetValues, "O");
+		cout << dataSize << ", " << map.back() << endl;
+		assert(dataSize == map.back());
+		showVectorValues("Targets: ", targetValues);
 		net.backProp(targetValues);
 
-		double percent_error = abs(outputValues[0] - targetValues[0]);
-		cout << "Error: " << percent_error * 100 << "%" << endl;
-		cachedErrorValues.push_back(percent_error);	
+		for (int i = 0; i < outputValues.size(); i++) {
+			double percent_error = abs(outputValues[i] - targetValues[i]);
+			cout << "Error [" << i << "]: " << percent_error * 100 << "%" << endl;
+			cachedErrorValues.push_back(percent_error);
+		}
 	}
 	cout << endl << "Done training." << endl;
 
@@ -54,7 +59,7 @@ int main(int* argc, char* argv[]) {
 	for (int i = 0; i < cachedErrorValues.size(); i++) {
 		error_file << i << "''" << cachedErrorValues[i] << endl;
 	}
-
+	cout << "Done writing." << endl;
 	_getch();
 	return 0;
 }

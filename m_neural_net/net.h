@@ -118,7 +118,7 @@ private:
 	static double recent_sError;
 };
 
-double Net::recent_sError = 100000;
+double Net::recent_sError = 50000;
 
 Net::Net(const std::vector<unsigned> &map) {
 	//The map is a vector of 3 elements, size of input, size of 1st hidden, 2nd hidden, ..... nth hidden, and size of output
@@ -227,11 +227,10 @@ void Net::getResults(std::vector<double> &resultValues) const {
 	}
 }
 
-
 double Neuron::activate(double x) {
 	return tanh(x);
 }
 
 double Neuron::activatePrime(double x) {
-	return 1 - tanh(x)*tanh(x);
+	return 1-tanh(x)*tanh(x);
 }

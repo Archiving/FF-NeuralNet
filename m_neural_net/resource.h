@@ -10,8 +10,7 @@ public:
 	void getTopology(std::vector<unsigned> &topology);
 
 	//Get the next input/output in file, return the size.
-	unsigned getNextInputs(std::vector<double> &inputValues);
-	unsigned getTargetOutputs(std::vector<double> &targetOutputVals);
+	size_t getValues(std::vector<double> &vals, const std::string &tag);
 
 private:
 	std::ifstream tfile;
@@ -42,47 +41,23 @@ void TFile::getTopology(std::vector<unsigned> &topology) {
 	return;
 }
 
-using namespace std;
+std::size_t TFile::getValues(std::vector<double> &vals, const std::string &tag) {
+	vals.clear();
+	std::string line;
+	std::getline(tfile, line);
+	std::stringstream ss(line);
 
-unsigned TFile::getNextInputs(vector<double> &inputVals)
-{
-	inputVals.clear();
-
-	string line;
-	getline(tfile, line);
-	stringstream ss(line);
-
-	string label;
+	std::string label;
 	ss >> label;
-	if (label.compare("I") == 0) {
-		double oneValue;
-		while (ss >> oneValue) {
-			inputVals.push_back(oneValue);
+	if (label.compare(tag) == 0) {
+		double val;
+		while (ss >> val) {
+			vals.push_back(val);
 		}
 	}
-
-	return inputVals.size();
+	return vals.size();
 }
 
-unsigned TFile::getTargetOutputs(vector<double> &targetOutputVals)
-{
-	targetOutputVals.clear();
-
-	string line;
-	getline(tfile, line);
-	stringstream ss(line);
-
-	string label;
-	ss >> label;
-	if (label.compare("O") == 0) {
-		double oneValue;
-		while (ss >> oneValue) {
-			targetOutputVals.push_back(oneValue);
-		}
-	}
-
-	return targetOutputVals.size();
-}
 
 
 
