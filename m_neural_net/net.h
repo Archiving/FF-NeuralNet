@@ -24,6 +24,7 @@ public:
 	void calculateOutputGradients(double targetVal);
 	void calculateHiddenGradients(const Layer &nextLayer);
 	void updateInputWeights(Layer &prevLayer);
+	static void setLearningRate(double rate) { eta = rate; }
 private:
 	static double eta;
 	static double alpha;
@@ -228,7 +229,7 @@ void Net::getResults(std::vector<double> &resultValues) const {
 }
 
 double Neuron::activate(double x) {
-	return tanh(x);
+	return 1.7159*tanh(2/3*x);
 }
 
 double Neuron::activatePrime(double x) {
